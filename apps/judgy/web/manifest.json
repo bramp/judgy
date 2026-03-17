@@ -1,6 +1,6 @@
 {
-    "name": "grids",
-    "short_name": "grids",
+    "name": "judgy",
+    "short_name": "judgy",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

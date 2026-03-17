@@ -7,25 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:655860970964:android:703417afa1af84ebaa5241",
-        "android_client_info": {
-          "package_name": "net.bramp.grids"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAJhNETFl0PwZAIJe4yc7-atNHtqz6SVDQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:655860970964:android:f887611c82505c6eaa5241",
         "android_client_info": {
           "package_name": "net.bramp.judgy"
