@@ -4,13 +4,20 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService extends ChangeNotifier {
-  AuthService() {
+  AuthService({
+    auth.FirebaseAuth? firebaseAuth,
+    GoogleSignIn? googleSignIn,
+  }) : _firebaseAuth = firebaseAuth ?? auth.FirebaseAuth.instance,
+       _googleSignIn = googleSignIn ?? GoogleSignIn.instance {
     _firebaseAuth.authStateChanges().listen((user) {
       _currentUser = user;
       notifyListeners();
     });
   }
-  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+
+  final auth.FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
+  bool _googleSignInInitialized = false;
   auth.User? _currentUser;
 
   auth.User? get currentUser => _currentUser;
@@ -54,19 +61,26 @@ class AuthService extends ChangeNotifier {
       final provider = auth.GoogleAuthProvider();
       return _firebaseAuth.signInWithPopup(provider);
     } else {
-      final googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        return null; // The user canceled the sign-in
+      if (!_googleSignInInitialized) {
+        await _googleSignIn.initialize();
+        _googleSignInInitialized = true;
       }
 
-      final googleAuth = await googleUser.authentication;
+      try {
+        final googleUser = await _googleSignIn.authenticate();
+        final googleAuth = googleUser.authentication;
 
-      final credential = auth.GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+        final credential = auth.GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+        );
 
-      return _firebaseAuth.signInWithCredential(credential);
+        return await _firebaseAuth.signInWithCredential(credential);
+      } on GoogleSignInException catch (e) {
+        if (e.code == GoogleSignInExceptionCode.canceled) {
+          return null; // The user canceled the sign-in
+        }
+        rethrow;
+      }
     }
   }
 
