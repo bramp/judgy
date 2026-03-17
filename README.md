@@ -1,102 +1,29 @@
-# Grids
+# Apples (Working Title: Judgy)
 
-"Grids" is an interactive, grid-based puzzle game inspired by Taiji and The Witness. Built cross-platform with Flutter using modern, strict Dart testing environments and `provider` state management.
-
-## Documentation
-
-* [Game Design Document](docs/game_design.md): Explains the overarching puzzle rules, how different grid mechanics work, and rule logic.
-* [Architecture Design Document](docs/architecture_design.md): High-level overview of the application components and tech stack.
-* [TODO Tracker](TODO.md): Track the immediate goals and task progress.
-
-## Setup & Running
-
-This project uses [Dart pub workspaces](https://dart.dev/tools/pub/workspaces) with Flutter.
-
-1. Ensure you have Flutter SDK installed (3.11.0 or newer).
-2. Install packages from the workspace root:
-
-   ```bash
-   flutter pub get
-   ```
-
-3. Run or deploy to your target emulator/browser:
-
-   ```bash
-   cd apps/judgy && flutter run -d chrome
-   ```
-
-   (Alternatively, use `-d macos` or an iPhone/Android emulator).
-
-## Firebase Analytics Setup
-
-This project uses Firebase Analytics to track puzzle solve attempts and timing. To configure it for your own Firebase project:
-
-1. Install the [FlutterFire CLI](https://firebase.flutter.dev/docs/cli/).
-2. Run the configuration command in the root of the project:
-
-   ```bash
-   flutterfire configure
-   ```
-
-3. Follow the prompts to select your Firebase project and select the platforms you wish to support.
-4. This will overwrite the placeholder `apps/judgy/lib/firebase_options.dart` file with your real credentials, enabling analytics to begin tracking automatically.
+An Apples to Apples inspired multiplayer card game built with Flutter and Firebase, featuring AI bot personalities.
 
 ## Project Structure
 
-This project uses [Dart pub workspaces](https://dart.dev/tools/pub/workspaces) to split the codebase into focused packages:
+This repository is structured as a monorepo containing the main game application, shared game data, artwork, and documentation.
 
-| Package | Path | Description |
-|---------|------|-------------|
-| `judgy` | `apps/judgy/` | Flutter app — UI, providers, services, platform dirs |
-| `judgy_engine` | `packages/engine/` | Pure Dart game engine — grid logic, solver, validators, level data |
-| `judgy_tools` | `packages/tools/` | CLI tools — puzzle solver, generator |
+### Rough Layout
 
-## Testing
+* **`apps/judgy/`**: The main Flutter game application codebase. It includes the application UI, state management, game logic, and services (like the AI bot service).
+* **`artwork/`**: Visual assets, designs, and game artwork.
+* **`data/`**: Raw game data in CSV format (e.g., `adjectives.csv` and `nouns.csv` for the game cards).
+* **`docs/`**: Project documentation, such as `characters.md` detailing the AI bot personalities.
+* **`AGENTS.md`**: Rules and instructions for AI coding agents working within this repository.
+* **`DESIGN.md`**: Architecture and game design decisions.
+* **`TODO.md`**: Master list of planned features, bugs, and tasks.
 
-The core engine is 100% decoupled from the UI, so it is extensively tested via unit tests. A `Makefile` provides convenient commands for running checks across all packages:
+## Getting Started
 
-| Command | Description |
-|---------|-------------|
-| `make` | Run format, analyze, and all tests |
-| `make format` | Format all Dart code |
-| `make analyze` | Run the analyzer across all packages |
-| `make test` | Run all tests (engine + app) |
-| `make test-engine` | Run engine tests only (pure Dart, fast) |
-| `make test-app` | Run app tests only |
-| `make fix` | Apply auto-fixes from the analyzer |
-| `make clean` | Delete build artifacts |
-
-## Development
-
-To ensure code quality and consistency, we use [pre-commit](https://pre-commit.com/) hooks. To set them up locally:
-
-1. Install `pre-commit` (e.g., `brew install pre-commit`).
-2. Install the hooks in the repository:
-
-   ```bash
-   pre-commit install
-   ```
-
-The hooks will now run automatically on every `git commit` (they delegate to the Makefile targets). You can also run them manually on all files:
+To run the main application:
 
 ```bash
-pre-commit run --all-files
+cd apps/judgy
+flutter pub get
+flutter run
 ```
 
-### Puzzle Solver CLI
-
-The project includes a brute-force solver that can find all possible solutions for the levels defined in the game.
-
-To run a summary of all levels:
-
-```bash
-cd packages/tools && dart run bin/solve.dart
-```
-
-To see all solutions for a specific level (and copy-pastable ASCII):
-
-```bash
-cd packages/tools && dart run bin/solve.dart shrine_5
-```
-
-This tool is useful for verifying puzzle uniqueness and ensuring that every level in the repository is actually solvable.
+For more specific details on setting up native platforms and Firebase configurations, see the app-specific README at [`apps/judgy/README.md`](apps/judgy/README.md).

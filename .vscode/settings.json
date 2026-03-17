@@ -1,0 +1,12 @@
+{
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.wordWrapColumn": 80,
+        "editor.wordWrap": "wordWrapColumn"
+    },
+    "dart.lineLength": 80,
+    "chat.tools.terminal.autoApprove": {
+        "flutter": true
+    }
+}

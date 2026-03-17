@@ -1,30 +1,13 @@
-import 'package:firebase_vertexai/firebase_vertexai.dart';
-import 'package:judgy/models/bot_personality.dart';
+import 'package:firebase_ai/firebase_ai.dart';
 import 'package:judgy/models/game_models.dart';
 
 class AIBotService {
   AIBotService();
 
-  GenerativeModel _getModel(BotPersonality? personality) {
-    if (personality == null) {
-      // ignore: deprecated_member_use, Migration pending
-      return FirebaseVertexAI.instance.generativeModel(
-        model: 'gemini-1.5-pro',
-      );
-    }
-
-    // TODO: drop in remote config and prompt templates later
-    // See: https://firebase.google.com/docs/ai-logic/server-prompt-templates/syntax-and-examples?api=dev
-    // ignore: deprecated_member_use, Migration pending
-    return FirebaseVertexAI.instance.generativeModel(
-      model: 'gemini-1.5-pro',
-      systemInstruction: Content.system(
-        'You are ${personality.name}, playing an Apples-to-Apples style game.\n'
-        'Role: ${personality.role}.\n'
-        'Personality: ${personality.description}\n'
-        'Stay strictly in character and pick cards based on your unique personality.',
-      ),
-    );
+  // ignore: experimental_member_use
+  TemplateGenerativeModel _getTemplateModel() {
+    // ignore: experimental_member_use
+    return FirebaseAI.vertexAI().templateGenerativeModel();
   }
 
   /// AI evaluates its hand to pick the best/funniest noun for the adjective.
@@ -38,20 +21,24 @@ class AIBotService {
         .map((card) => 'ID: ${card.id} - ${card.text}')
         .join('\n');
 
-    final prompt =
-        '''
-The current Adjective card played by the Judge is: "${currentAdjective.text}"
-
-Here is your hand of Noun cards:
-$handDescriptions
-
-Based on the adjective, pick the Noun card from your hand that YOU would pick.
-Reply with ONLY the ID of the selected card, nothing else. Do not add any extra text or punctuation.
-''';
-
     try {
-      final model = _getModel(botPlayer.botPersonality);
-      final response = await model.generateContent([Content.text(prompt)]);
+      final model = _getTemplateModel();
+
+      // Assumes a server prompt template named 'bot-select-noun' exists.
+      // ignore: experimental_member_use
+      final response = await model.generateContent(
+        // TODO The `bot-select-noun` templateId should be configurable with Remote Config.
+        'bot-select-noun',
+        inputs: {
+          'botName': botPlayer.botPersonality?.name ?? 'Standard Bot',
+          'botRole': botPlayer.botPersonality?.role ?? 'Participant',
+          'botDescription':
+              botPlayer.botPersonality?.description ?? 'Pick cards randomly.',
+          'adjective': currentAdjective.text,
+          'handDescriptions': handDescriptions,
+        },
+      );
+
       var selectedId = response.text?.trim() ?? '';
       // Removing any non-word characters just in case it added periods or formatting
       selectedId = selectedId.replaceAll(RegExp(r'[^\w\-]'), '');
@@ -78,21 +65,25 @@ Reply with ONLY the ID of the selected card, nothing else. Do not add any extra 
         .map((play) => 'ID: ${play.card.id} - ${play.card.text}')
         .join('\n');
 
-    final prompt =
-        '''
-You are the judge this round.
-The round's Adjective is: "${currentAdjective.text}"
-
-Here are the Noun cards played by the other players:
-$submissionDescriptions
-
-Which one do YOU think is the best match (based on your personal preferences and character)?
-Reply with ONLY the ID of the winning card, nothing else. Do not add any extra text or punctuation.
-''';
-
     try {
-      final model = _getModel(judgePlayer.botPersonality);
-      final response = await model.generateContent([Content.text(prompt)]);
+      final model = _getTemplateModel();
+
+      // Assumes a server prompt template named 'bot-judge' exists.
+      // ignore: experimental_member_use
+      final response = await model.generateContent(
+        // TODO The `bot-judge` templateId should be configurable with Remote Config.
+        'bot-judge',
+        inputs: {
+          'judgeName': judgePlayer.botPersonality?.name ?? 'Standard Judge',
+          'judgeRole': judgePlayer.botPersonality?.role ?? 'Judge',
+          'judgeDescription':
+              judgePlayer.botPersonality?.description ??
+              'Pick the most fitting card objectively.',
+          'adjective': currentAdjective.text,
+          'submissionDescriptions': submissionDescriptions,
+        },
+      );
+
       var winningId = response.text?.trim() ?? '';
       winningId = winningId.replaceAll(RegExp(r'[^\w\-]'), '');
 
