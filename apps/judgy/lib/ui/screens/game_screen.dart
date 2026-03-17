@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:judgy/models/game_models.dart';
+import 'package:judgy/services/analytics_service.dart';
+import 'package:judgy/services/deck_service.dart';
 import 'package:judgy/services/local_game_engine.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +14,9 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) {
-        final engine = LocalGameEngine();
+        final analyticsService = context.read<AnalyticsService>();
+        final deckService = context.read<DeckService>();
+        final engine = LocalGameEngine(analyticsService, deckService);
         unawaited(engine.initializeLocalGame());
         return engine;
       },

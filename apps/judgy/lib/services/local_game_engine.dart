@@ -3,13 +3,19 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:judgy/data/mock_deck.dart';
 import 'package:judgy/models/bot_personality.dart';
 import 'package:judgy/models/game_models.dart';
 import 'package:judgy/services/ai_bot_service.dart';
+import 'package:judgy/services/analytics_service.dart';
+import 'package:judgy/services/deck_service.dart';
 import 'package:uuid/uuid.dart';
 
 class LocalGameEngine extends ChangeNotifier {
+  LocalGameEngine(this._analyticsService, this._deckService);
+
+  final AnalyticsService _analyticsService;
+  final DeckService _deckService;
+
   GameRoom? _room;
   GameRoom? get room => _room;
 
@@ -19,14 +25,18 @@ class LocalGameEngine extends ChangeNotifier {
   final Uuid _uuid = const Uuid();
   final AIBotService _aiService = AIBotService();
 
+  List<CardModel> _allAdjectives = [];
+  List<CardModel> _allNouns = [];
   List<CardModel> _unusedAdjectives = [];
   List<CardModel> _unusedNouns = [];
 
   Future<void> initializeLocalGame() async {
-    _unusedAdjectives = List.from(MockDeck.adjectives)..shuffle(_rnd);
-    _unusedNouns = List.from(MockDeck.nouns)..shuffle(_rnd);
+    _allAdjectives = _deckService.getActiveAdjectives();
+    _allNouns = _deckService.getActiveNouns();
 
-    // TODO: drop in remote config here to fetch bots.json dynamically.
+    _unusedAdjectives = List.from(_allAdjectives)..shuffle(_rnd);
+    _unusedNouns = List.from(_allNouns)..shuffle(_rnd);
+
     final jsonString = await rootBundle.loadString(
       'assets/data/bots.json',
     );
@@ -73,6 +83,12 @@ class LocalGameEngine extends ChangeNotifier {
 
   void startGame() {
     if (_room == null) return;
+
+    _analyticsService.logEvent(
+      name: 'game_started',
+      parameters: {'player_count': _room!.players.length},
+    );
+
     _dealCardsToAll();
     _startNewRound();
   }
@@ -80,7 +96,10 @@ class LocalGameEngine extends ChangeNotifier {
   void _dealCardsToAll() {
     final updatedPlayers = _room!.players.map((p) {
       final updatedHand = List<CardModel>.from(p.hand);
-      while (updatedHand.length < 7 && _unusedNouns.isNotEmpty) {
+      while (updatedHand.length < 7) {
+        if (_unusedNouns.isEmpty) {
+          _unusedNouns = List.from(_allNouns)..shuffle(_rnd);
+        }
         updatedHand.add(_unusedNouns.removeLast());
       }
       return p.copyWith(hand: updatedHand);
@@ -91,7 +110,7 @@ class LocalGameEngine extends ChangeNotifier {
 
   void _startNewRound() {
     if (_unusedAdjectives.isEmpty) {
-      _unusedAdjectives = List.from(MockDeck.adjectives)..shuffle(_rnd);
+      _unusedAdjectives = List.from(_allAdjectives)..shuffle(_rnd);
     }
 
     final newRoundNumber = _room!.roundNumber + 1;
@@ -101,6 +120,15 @@ class LocalGameEngine extends ChangeNotifier {
     final judge = _room!.players[judgeIndex];
 
     final adjective = _unusedAdjectives.removeLast();
+
+    _analyticsService.logEvent(
+      name: 'round_played',
+      parameters: {
+        'round_number': newRoundNumber,
+        'adjective_id': adjective.id,
+        'adjective_text': adjective.text,
+      },
+    );
 
     final round = Round(
       id: _uuid.v4(),
@@ -159,7 +187,8 @@ class LocalGameEngine extends ChangeNotifier {
     notifyListeners();
 
     if (newStatus == GameStatus.judging) {
-      unawaited(_processBotJudge());
+      // ignore: discarded_futures
+      _processBotJudge();
     }
   }
 

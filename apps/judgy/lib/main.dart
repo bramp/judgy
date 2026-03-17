@@ -8,6 +8,7 @@ import 'package:judgy/firebase_options.dart';
 import 'package:judgy/providers/theme_provider.dart';
 import 'package:judgy/services/analytics_service.dart';
 import 'package:judgy/services/consent_service.dart';
+import 'package:judgy/services/deck_service.dart';
 import 'package:judgy/services/preferences_service.dart';
 import 'package:judgy/ui/screens/game_screen.dart';
 import 'package:judgy/ui/screens/home_screen.dart';
@@ -36,10 +37,11 @@ void main() async {
     debugPrint('Firebase initialization failed (not configured?): $e');
   }
 
-  // Initialize synchronous access to shared_preferences
   final preferencesService = await PreferencesService.init();
   final consentService = ConsentService(preferencesService);
+  final deckService = DeckService(preferencesService);
   final analyticsService = AnalyticsService(consentService);
+  await deckService.init();
 
   FlutterNativeSplash.remove();
 
@@ -47,6 +49,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<ConsentService>.value(value: consentService),
+        ChangeNotifierProvider<DeckService>.value(value: deckService),
         Provider<AnalyticsService>.value(value: analyticsService),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
