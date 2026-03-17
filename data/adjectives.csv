@@ -1,0 +1,101 @@
+Category,Adjective,Description
+Sensory & Physical,Crunchy,Something that makes a loud satisfying noise when crushed.
+Sensory & Physical,Fragrant,Having a pleasant sweet or distinct smell.
+Sensory & Physical,Slimy,Moist soft and slippery to the touch.
+Sensory & Physical,Gigantic,Extremely large in size or scale.
+Sensory & Physical,Prickly,Covered in sharp points or thorns.
+Sensory & Physical,Freezing,Extremely cold; lacking warmth or empathy.
+Sensory & Physical,Luminous,Radiating or reflecting bright steady light.
+Sensory & Physical,Heavy,Weighing a lot; also used for serious topics.
+Sensory & Physical,Silky,Smooth and soft like fine fabric.
+Sensory & Physical,Aromatic,Having a strong usually pleasant spicy scent.
+Personality & Character,Arrogant,Having an exaggerated sense of one's own importance.
+Personality & Character,Mischievous,Fond of playing harmless tricks or causing trouble.
+Personality & Character,Courageous,Brave; willing to face danger without fear.
+Personality & Character,Clumsy,Lacking grace in movement; prone to accidents.
+Personality & Character,Witty,Quick and inventive with verbal humor.
+Personality & Character,Grumpy,Easily annoyed; in a perpetually bad mood.
+Personality & Character,Charismatic,Possessing a compelling charm that inspires devotion.
+Personality & Character,Gullible,Easily persuaded to believe something; naive.
+Personality & Character,Eccentric,Unconventional and slightly strange in a charming way.
+Personality & Character,Stoic,Able to endure pain or hardship without showing feelings.
+Value & Quality,Expensive,Costing a lot of money; high-priced and luxury.
+Value & Quality,Shabby,In poor condition through long or hard use.
+Value & Quality,Exquisite,Extremely beautiful and delicately made.
+Value & Quality,Worthless,Having no real value or use; insignificant.
+Value & Quality,Premium,Of superior quality and therefore higher price.
+Value & Quality,Counterfeit,Made in exact imitation of something valuable to deceive.
+Value & Quality,Indestructible,Not able to be destroyed; incredibly tough.
+Value & Quality,Flawless,Without any imperfections or defects; perfect.
+Value & Quality,Generic,Lacking distinctive qualities; basic or plain.
+Value & Quality,Elite,Representing the best or most superior of a group.
+Emotional & Mood,Melancholy,A feeling of pensive sadness with no obvious cause.
+Emotional & Mood,Terrifying,Causing extreme fear; frightening.
+Emotional & Mood,Delirious,In an acutely disturbed state of mind; wild excitement.
+Emotional & Mood,Nostalgic,Exhibiting a sentimental longing for the past.
+Emotional & Mood,Cheerful,Noticeably happy and optimistic.
+Emotional & Mood,Hostile,Unfriendly; antagonistic or opposed.
+Emotional & Mood,Calm,Free from agitation excitement or storminess.
+Emotional & Mood,Gloomy,Dark or poorly lit; feeling depressed or hopeless.
+Emotional & Mood,Exuberant,Filled with energy and excitement.
+Emotional & Mood,Jealous,Feeling resentment toward someone’s achievements or possessions.
+Social & Cultural,Legendary,Remarkable enough to be the subject of a legend.
+Social & Cultural,Controversial,Giving rise to public disagreement or heated discussion.
+Social & Cultural,Sophisticated,Having a great deal of worldly experience and fashion.
+Social & Cultural,Obsolete,No longer produced or used; out of date.
+Social & Cultural,Trendy,Very fashionable or up to date.
+Social & Cultural,Traditional,Long-established; following customs from the past.
+Social & Cultural,Infamous,Well known for some bad quality or deed.
+Social & Cultural,Rebellious,Showing a desire to resist authority or convention.
+Social & Cultural,Global,Relating to the whole world; worldwide.
+Social & Cultural,Primitive,Relating to an early stage in evolutionary development.
+Opinionated & Subjective,Ridiculous,Deserving or inviting derision or mockery; absurd.
+Opinionated & Subjective,Breathtaking,Astonishing or awe-inspiring in quality.
+Opinionated & Subjective,Repulsive,Arousing intense distaste or disgust.
+Opinionated & Subjective,Adorable,Inspiring great affection; delightful or charming.
+Opinionated & Subjective,Overrated,Rated or valued too highly.
+Opinionated & Subjective,Pathetic,Arousing pity especially through vulnerability or sadness.
+Opinionated & Subjective,Magnificent,Impressively beautiful elaborate or extravagant.
+Opinionated & Subjective,Annoying,Causing irritation or slight anger.
+Opinionated & Subjective,Tasteless,Lacking aesthetic judgment; also having no flavor.
+Opinionated & Subjective,Brilliant,Exceptionally clever or talented; also very bright.
+Power & Impact,Deadly,Causing or able to cause death.
+Power & Impact,Explosive,Able or likely to shatter violently or burst.
+Power & Impact,Addictive,Habit-forming; very difficult to stop using.
+Power & Impact,Influential,Having a great impact on someone or something.
+Power & Impact,Fragile,Easily broken or damaged; delicate.
+Power & Impact,Invisible,Unable to be seen; unnoticed or ignored.
+Power & Impact,Chaotic,In a state of complete confusion and disorder.
+Power & Impact,Efficient,Achieving maximum productivity with minimum wasted effort.
+Power & Impact,Toxic,Poisonous; also used for harmful people or environments.
+Power & Impact,Infinite,Limitless or endless in space extent or size.
+Time & Frequency,Ancient,Belonging to the very distant past.
+Time & Frequency,Futuristic,Having very modern technology or design.
+Time & Frequency,Eternal,Lasting or existing forever; without end.
+Time & Frequency,Fleeting,Lasting for a very short time.
+Time & Frequency,Sudden,Occurring or done quickly and unexpectedly.
+Time & Frequency,Perpetual,Never ending or changing; occurring repeatedly.
+Time & Frequency,Stagnant,Showing no activity or growth; dull and sluggish.
+Time & Frequency,Spontaneous,Performed as a result of a sudden impulse.
+Time & Frequency,Rapid,Happening in a short time or at great speed.
+Time & Frequency,Timeless,Not affected by the passage of time.
+Scientific & Technical,Atomic,Relating to atoms; of devastating power.
+Scientific & Technical,Magnetic,Having the power to attract; also used for charisma.
+Scientific & Technical,Synthetic,Made by chemical synthesis to imitate a natural product.
+Scientific & Technical,Radioactive,Emitting radiation; potentially dangerous and glowing.
+Scientific & Technical,Symmetrical,Made up of exactly similar parts facing each other.
+Scientific & Technical,Volatile,Liable to change rapidly and unpredictably.
+Scientific & Technical,Inert,Lacking the ability or strength to move.
+Scientific & Technical,Opaque,Not able to be seen through; not transparent.
+Scientific & Technical,Hydrated,Containing adequate water; refreshed.
+Scientific & Technical,Anatomical,Relating to bodily structure.
+Random Fun,Spicy,Having a strong hot flavor; also scandalous.
+Random Fun,Caffeinated,High-energy; jittery and alert.
+Random Fun,Cursed,Under a spell or doomed to have bad luck.
+Random Fun,Magical,Seems supernatural; beautiful or delightful.
+Random Fun,Soggy,Saturated with liquid; soft and watery.
+Random Fun,Sparkly,Shining with bright points of light.
+Random Fun,Dramatic,Striking in appearance or effect; exaggerated.
+Random Fun,Anonymous,Having no outstanding individual or unusual features.
+Random Fun,Fuzzy,Having a frizzy fluffy or frayed texture.
+Random Fun,Bizarre,Very strange or unusual.

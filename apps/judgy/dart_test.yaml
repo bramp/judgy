@@ -1,0 +1,9 @@
+# Test configuration for all Dart/Flutter tests
+# https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md
+
+# Set default timeout for all tests to 10 seconds
+timeout: 10s
+
+tags:
+  golden:
+  mac:

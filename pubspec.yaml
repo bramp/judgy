@@ -1,0 +1,8 @@
+name: judgy_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+workspace:
+  - apps/judgy
