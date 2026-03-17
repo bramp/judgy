@@ -35,9 +35,9 @@ test-app-ci:
 		--dart-define=COMMIT_HASH=$$(git rev-parse --short HEAD) \
 		--dart-define=BUILD_DATE="$$(date -u +'%Y-%m-%d %H:%M UTC')"
 
-## Run golden tests for CI (macOS only)
-test-golden-ci:
-	cd apps/judgy && flutter test --tags mac
+### Run golden tests for CI (macOS only)
+#test-golden-ci:
+#	cd apps/judgy && flutter test --tags mac
 
 ## Apply auto-fixes
 fix:

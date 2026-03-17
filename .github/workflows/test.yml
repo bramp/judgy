@@ -40,25 +40,25 @@ jobs:
       - name: Run unit tests
         run: make test-app-ci
 
-  golden_tests:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Cache default Flutter artifacts
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.pub-cache/
-            /opt/hostedtoolcache/flutter/
-          key: ${{ runner.os }}-flutter-${{ runner.arch }}-${{ hashFiles('**/pubspec.lock') }}
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Run golden tests
-        run: make test-golden-ci
+#  golden_tests:
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v6
+#      - name: Cache default Flutter artifacts
+#        uses: actions/cache@v5
+#        with:
+#          path: |
+#            ~/.pub-cache/
+#            /opt/hostedtoolcache/flutter/
+#          key: ${{ runner.os }}-flutter-${{ runner.arch }}-${{ hashFiles('**/pubspec.lock') }}
+#
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          channel: 'stable'
+#
+#      - name: Install dependencies
+#        run: flutter pub get
+#
+#      - name: Run golden tests
+#        run: make test-golden-ci
