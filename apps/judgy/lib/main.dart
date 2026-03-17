@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +36,8 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    // TODO(bramp): Configure App Check providers in the Firebase Console
+    await FirebaseAppCheck.instance.activate();
   } on Object catch (e) {
     debugPrint('Firebase initialization failed (not configured?): $e');
   }
