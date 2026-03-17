@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:judgy/build_info.dart';
 import 'package:judgy/services/consent_service.dart';
+import 'package:judgy/services/deck_service.dart';
 import 'package:provider/provider.dart';
 
 /// Shows the settings dialog as an overlay on top of the current screen.
@@ -18,6 +19,7 @@ class SettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final consentService = context.watch<ConsentService>();
+    final deckService = context.watch<DeckService>();
     final theme = Theme.of(context);
 
     return Dialog(
@@ -55,6 +57,24 @@ class SettingsDialog extends StatelessWidget {
                     title: const Text('Version'),
                     subtitle: Text(BuildInfo.shortVersion),
                   ),
+
+                  const Divider(),
+
+                  // ── Deck Categories ────────────────────
+                  _SectionHeader(title: 'Deck Categories', theme: theme),
+                  for (final category in deckService.availableCategories)
+                    CheckboxListTile(
+                      title: Text(category),
+                      value: deckService.enabledCategories.contains(category),
+                      onChanged: (value) {
+                        if (value != null) {
+                          deckService.toggleCategory(
+                            category,
+                            isEnabled: value,
+                          );
+                        }
+                      },
+                    ),
 
                   const Divider(),
 

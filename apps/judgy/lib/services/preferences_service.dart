@@ -17,6 +17,7 @@ class PreferencesService {
 
   String? getString(String key) => _prefs.getString(key);
   bool? getBool(String key) => _prefs.getBool(key);
+  List<String>? getStringList(String key) => _prefs.getStringList(key);
 
   // ── Write ─────────────────────────────────────────────────────────────
 
@@ -24,5 +25,7 @@ class PreferencesService {
       _prefs.setString(key, value);
   Future<void> setBool(String key, {required bool value}) =>
       _prefs.setBool(key, value);
+  Future<void> setStringList(String key, List<String> value) =>
+      _prefs.setStringList(key, value);
   Future<void> remove(String key) => _prefs.remove(key);
 }

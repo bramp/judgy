@@ -8,6 +8,7 @@ class CardModel {
     required this.id,
     required this.text,
     required this.type,
+    this.category,
   });
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
@@ -15,17 +16,20 @@ class CardModel {
       id: json['id'] as String,
       text: json['text'] as String,
       type: CardType.values.byName(json['type'] as String),
+      category: json['category'] as String?,
     );
   }
   final String id;
   final String text;
   final CardType type;
+  final String? category;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'text': text,
       'type': type.name,
+      if (category != null) 'category': category,
     };
   }
 }
