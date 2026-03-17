@@ -72,6 +72,7 @@ class DeckService extends ChangeNotifier {
       }
       _enabledCategories.remove(category);
     }
+    // ignore: discarded_futures, Preferences are set optimistically
     _preferencesService.setStringList(
       _categoriesKey,
       _enabledCategories.toList(),
@@ -98,7 +99,7 @@ class DeckService extends ChangeNotifier {
   List<CardModel> _parseCsv(String csvString, CardType type) {
     final rows = const CsvDecoder().convert(csvString).skip(1);
     final cards = <CardModel>[];
-    int idCounter = 1;
+    var idCounter = 1;
     for (final row in rows) {
       if (row.isEmpty) continue;
 

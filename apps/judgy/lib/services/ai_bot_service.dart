@@ -4,9 +4,9 @@ import 'package:judgy/models/game_models.dart';
 class AIBotService {
   AIBotService();
 
-  // ignore: experimental_member_use
+  // ignore: experimental_member_use, Required for AI functionality
   TemplateGenerativeModel _getTemplateModel() {
-    // ignore: experimental_member_use
+    // ignore: experimental_member_use, Required for AI functionality
     return FirebaseAI.vertexAI().templateGenerativeModel();
   }
 
@@ -25,9 +25,9 @@ class AIBotService {
       final model = _getTemplateModel();
 
       // Assumes a server prompt template named 'bot-select-noun' exists.
-      // ignore: experimental_member_use
+      // ignore: experimental_member_use, Required for AI functionality
       final response = await model.generateContent(
-        // TODO The `bot-select-noun` templateId should be configurable with Remote Config.
+        // TODO(bramp): The `bot-select-noun` templateId should be configurable with Remote Config.
         'bot-select-noun',
         inputs: {
           'botName': botPlayer.botPersonality?.name ?? 'Standard Bot',
@@ -69,9 +69,9 @@ class AIBotService {
       final model = _getTemplateModel();
 
       // Assumes a server prompt template named 'bot-judge' exists.
-      // ignore: experimental_member_use
+      // ignore: experimental_member_use, Required for AI functionality
       final response = await model.generateContent(
-        // TODO The `bot-judge` templateId should be configurable with Remote Config.
+        // TODO(bramp): The `bot-judge` templateId should be configurable with Remote Config.
         'bot-judge',
         inputs: {
           'judgeName': judgePlayer.botPersonality?.name ?? 'Standard Judge',

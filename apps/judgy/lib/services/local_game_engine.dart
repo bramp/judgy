@@ -187,8 +187,7 @@ class LocalGameEngine extends ChangeNotifier {
     notifyListeners();
 
     if (newStatus == GameStatus.judging) {
-      // ignore: discarded_futures
-      _processBotJudge();
+      unawaited(_processBotJudge());
     }
   }
 

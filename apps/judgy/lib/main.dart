@@ -7,11 +7,13 @@ import 'package:go_router/go_router.dart';
 import 'package:judgy/firebase_options.dart';
 import 'package:judgy/providers/theme_provider.dart';
 import 'package:judgy/services/analytics_service.dart';
+import 'package:judgy/services/auth_service.dart';
 import 'package:judgy/services/consent_service.dart';
 import 'package:judgy/services/deck_service.dart';
 import 'package:judgy/services/preferences_service.dart';
 import 'package:judgy/ui/screens/game_screen.dart';
 import 'package:judgy/ui/screens/home_screen.dart';
+import 'package:judgy/ui/screens/login_screen.dart';
 import 'package:judgy/ui/screens/settings_screen.dart';
 import 'package:judgy/ui/widgets/consent_banner.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +43,7 @@ void main() async {
   final consentService = ConsentService(preferencesService);
   final deckService = DeckService(preferencesService);
   final analyticsService = AnalyticsService(consentService);
+  final authService = AuthService();
   await deckService.init();
 
   FlutterNativeSplash.remove();
@@ -51,6 +54,7 @@ void main() async {
         ChangeNotifierProvider<ConsentService>.value(value: consentService),
         ChangeNotifierProvider<DeckService>.value(value: deckService),
         Provider<AnalyticsService>.value(value: analyticsService),
+        ChangeNotifierProvider<AuthService>.value(value: authService),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: const JudgyApp(),
@@ -67,6 +71,10 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/game/local',

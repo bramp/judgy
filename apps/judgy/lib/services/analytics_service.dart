@@ -21,6 +21,7 @@ class AnalyticsService {
     try {
       if (Firebase.apps.isEmpty || !_consentService.analyticsAllowed) return;
 
+      // TODO(bramp): Return the future, and let the caller decide if they want to await it or not.
       unawaited(
         FirebaseAnalytics.instance.logEvent(
           name: name,

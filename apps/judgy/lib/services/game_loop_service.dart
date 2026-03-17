@@ -34,7 +34,7 @@ class GameLoopService extends ChangeNotifier {
         .collection('rooms')
         .doc(_roomId)
         .update(updatedRoom.toJson());
-    // TODO: Trigger actual card dealing logic here (perhaps via Cloud Function or client authority)
+    // TODO(bramp): Trigger actual card dealing logic here (perhaps via Cloud Function or client authority)
   }
 
   /// Transition state to Judging.
