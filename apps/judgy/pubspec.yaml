@@ -43,6 +43,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/images/bots/
     - web/privacy.html
     - assets/data/bots.json
     - assets/data/nouns.csv
