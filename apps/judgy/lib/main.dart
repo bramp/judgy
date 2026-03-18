@@ -36,8 +36,13 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    // TODO(bramp): Configure App Check providers in the Firebase Console
-    await FirebaseAppCheck.instance.activate();
+    await FirebaseAppCheck.instance.activate(
+      providerWeb: ReCaptchaV3Provider(
+        '6Leu_o0sAAAAAP5iWQ8b0h3YniO1FHEY5Y9uOq7O',
+      ),
+      providerAndroid: AndroidProvider.playIntegrity,
+      providerApple: AppleProvider.deviceCheck,
+    );
   } on Object catch (e) {
     debugPrint('Firebase initialization failed (not configured?): $e');
   }
