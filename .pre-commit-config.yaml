@@ -3,6 +3,11 @@ repos:
     rev: v4.5.0
     hooks:
     -   id: check-yaml
+        args: [--allow-multiple-documents]
+        # Prompt templates use YAML front matter plus non-YAML body content
+        # (Handlebars-style directives), so strict YAML parsing will fail.
+        # TODO(bramp): Figure out how to check this yaml.
+        exclude: ^apps/judgy/prompt_templates/.*\.yaml$
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 -   repo: local

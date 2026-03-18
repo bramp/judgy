@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:judgy/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
+/// Screen widget for login flow.
 class LoginScreen extends StatelessWidget {
+  /// Creates a [LoginScreen].
   const LoginScreen({super.key});
 
   @override

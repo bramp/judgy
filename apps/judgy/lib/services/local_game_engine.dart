@@ -10,7 +10,9 @@ import 'package:judgy/services/analytics_service.dart';
 import 'package:judgy/services/deck_service.dart';
 import 'package:uuid/uuid.dart';
 
+/// Data model for localgameengine entities.
 class LocalGameEngine extends ChangeNotifier {
+  /// Documents this public API member.
   LocalGameEngine(
     this._analyticsService,
     this._deckService, {
@@ -24,8 +26,11 @@ class LocalGameEngine extends ChangeNotifier {
   final AIBotService _aiService;
 
   GameRoom? _room;
+
+  /// Documents this public API member.
   GameRoom? get room => _room;
 
+  /// Documents this public API member.
   String get localPlayerId => 'player_local';
 
   final Random _rnd;
@@ -36,6 +41,7 @@ class LocalGameEngine extends ChangeNotifier {
   List<CardModel> _unusedAdjectives = [];
   List<CardModel> _unusedNouns = [];
 
+  /// Executes initializeLocalGame.
   Future<void> initializeLocalGame() async {
     _allAdjectives = _deckService.getActiveAdjectives();
     _allNouns = _deckService.getActiveNouns();
@@ -87,6 +93,7 @@ class LocalGameEngine extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Executes startGame.
   void startGame() {
     if (_room == null) return;
 
@@ -153,6 +160,7 @@ class LocalGameEngine extends ChangeNotifier {
     unawaited(_processBotTurns());
   }
 
+  /// Executes playCard.
   void playCard(String playerId, CardModel card) {
     if (_room?.status != GameStatus.playersPlaying) return;
     final round = _room!.currentRound;
@@ -242,6 +250,7 @@ class LocalGameEngine extends ChangeNotifier {
     }
   }
 
+  /// Executes selectWinner.
   void selectWinner(String winningPlayerId) {
     if (_room?.status != GameStatus.judging) return;
     final round = _room!.currentRound;
@@ -262,6 +271,7 @@ class LocalGameEngine extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Executes nextRound.
   void nextRound() {
     if (_room?.status != GameStatus.scoring) return;
     _dealCardsToAll();

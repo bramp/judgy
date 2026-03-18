@@ -7,7 +7,9 @@ import 'package:judgy/services/deck_service.dart';
 import 'package:judgy/services/local_game_engine.dart';
 import 'package:provider/provider.dart';
 
+/// Screen widget for game flow.
 class GameScreen extends StatelessWidget {
+  /// Creates a [GameScreen].
   const GameScreen({super.key});
 
   @override
@@ -272,7 +274,9 @@ class _PlayerHand extends StatelessWidget {
   }
 }
 
+/// Provider for circular state.
 class CircularProvider extends StatelessWidget {
+  /// Creates a [CircularProvider].
   const CircularProvider({super.key});
 
   @override

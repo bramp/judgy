@@ -1,5 +1,5 @@
 // Firebase AI template APIs are currently experimental.
-// ignore_for_file: experimental_member_use
+// ignore_for_file: experimental_member_use, public_member_api_docs, lines_longer_than_80_chars
 
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:judgy/models/game_models.dart';

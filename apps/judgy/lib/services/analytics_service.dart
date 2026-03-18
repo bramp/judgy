@@ -8,6 +8,7 @@ import 'package:judgy/services/consent_service.dart';
 /// Wraps Firebase Analytics and silently drops events when the user has not
 /// given consent.  All calls are fire-and-forget.
 class AnalyticsService {
+  /// Documents this public API member.
   AnalyticsService(this._consentService);
 
   final ConsentService _consentService;
@@ -21,7 +22,8 @@ class AnalyticsService {
     try {
       if (Firebase.apps.isEmpty || !_consentService.analyticsAllowed) return;
 
-      // TODO(bramp): Return the future, and let the caller decide if they want to await it or not.
+      // TODO(bramp): Return the future, and let the caller decide
+      // if they want to await it or not.
       unawaited(
         FirebaseAnalytics.instance.logEvent(
           name: name,

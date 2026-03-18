@@ -5,13 +5,20 @@ import 'package:go_router/go_router.dart';
 import 'package:judgy/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
+/// Screen widget for home flow.
 class HomeScreen extends StatelessWidget {
+  /// Creates a [HomeScreen].
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final authService = context.watch<AuthService>();
     final isAuthenticated = authService.isAuthenticated;
+
+    final user =
+        authService.currentUser?.email ??
+        authService.currentUser?.uid ??
+        'Unknown';
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +50,7 @@ class HomeScreen extends StatelessWidget {
               )
             else ...[
               Text(
-                'Signed in as: ${authService.currentUser?.email ?? authService.currentUser?.uid ?? 'Unknown'}',
+                'Signed in as: $user',
               ),
               TextButton(
                 onPressed: authService.signOut,

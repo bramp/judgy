@@ -18,12 +18,12 @@ function deploy_template() {
   local FILE_PATH=$2
 
   echo "Deploying $TEMPLATE_ID from $FILE_PATH..."
-  
+
   # Note: The exact endpoint and payload format for Firebase AI Logic server templates
   # might be updated since it's currently a Preview feature.
   # This uses the v1beta create endpoint which generally expects a PromptTemplate JSON object
   # containing the template config, but we try passing the raw YAML if the CLI doesn't exist yet.
-  
+
   curl -s -X POST "https://firebaseml.googleapis.com/v1beta/projects/$PROJECT_ID/locations/$LOCATION/templates?templateId=$TEMPLATE_ID" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/yaml" \

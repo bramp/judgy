@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+/// Service for auth operations.
 class AuthService extends ChangeNotifier {
+  /// Documents this public API member.
   AuthService({
     auth.FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
@@ -20,7 +22,10 @@ class AuthService extends ChangeNotifier {
   bool _googleSignInInitialized = false;
   auth.User? _currentUser;
 
+  /// Documents this public API member.
   auth.User? get currentUser => _currentUser;
+
+  /// Documents this public API member.
   bool get isAuthenticated => _currentUser != null;
 
   /// Sign in anonymously (default quick play).

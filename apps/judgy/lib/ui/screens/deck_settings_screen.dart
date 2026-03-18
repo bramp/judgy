@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 /// Shows adjective categories and noun categories with subcategories,
 /// allowing users to enable/disable them individually or by group.
 class DeckSettingsScreen extends StatefulWidget {
+  /// Creates a [DeckSettingsScreen].
   const DeckSettingsScreen({super.key});
 
   @override

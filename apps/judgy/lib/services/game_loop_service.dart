@@ -2,13 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:judgy/models/game_models.dart';
 
+/// Service for gameloop operations.
 class GameLoopService extends ChangeNotifier {
+  /// Documents this public API member.
   GameLoopService({FirebaseFirestore? firestore})
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
 
   GameRoom? _currentRoom;
+
+  /// Documents this public API member.
   GameRoom? get currentRoom => _currentRoom;
 
   String? _roomId;
@@ -37,7 +41,8 @@ class GameLoopService extends ChangeNotifier {
         .collection('rooms')
         .doc(_roomId)
         .update(updatedRoom.toJson());
-    // TODO(bramp): Trigger actual card dealing logic here (perhaps via Cloud Function or client authority)
+    // TODO(bramp): Trigger actual card dealing logic here
+    // (perhaps via Cloud Function or client authority)
   }
 
   /// Transition state to Judging.

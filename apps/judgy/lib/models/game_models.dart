@@ -3,8 +3,10 @@
 import 'package:judgy/models/bot_personality.dart';
 
 /// Represents a playing card (either an Adjective or a Noun).
-// TODO(bramp): Drop the "Model" suffix from these class names, since it's redundant in Dart. Just "Card", "Player", etc.
+// TODO(bramp): Drop the "Model" suffix from these class names,
+// since it's redundant in Dart. Just "Card", "Player", etc.
 class CardModel {
+  /// Creates a [CardModel].
   const CardModel({
     required this.id,
     required this.text,
@@ -13,6 +15,7 @@ class CardModel {
     this.subcategory,
   });
 
+  /// Creates a [CardModel] from a JSON map.
   factory CardModel.fromJson(Map<String, dynamic> json) {
     return CardModel(
       id: json['id'] as String,
@@ -22,12 +25,23 @@ class CardModel {
       subcategory: json['subcategory'] as String?,
     );
   }
+
+  /// Unique identifier.
   final String id;
+
+  /// Display text for the card.
   final String text;
+
+  /// Card type value.
   final CardType type;
+
+  /// Optional top-level category name.
   final String? category;
+
+  /// Optional subcategory name.
   final String? subcategory;
 
+  /// Converts this [CardModel] to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -39,13 +53,18 @@ class CardModel {
   }
 }
 
+/// Enumerates cardtype values.
 enum CardType {
+  /// The adjective value.
   adjective,
+
+  /// The noun value.
   noun,
 }
 
 /// Represents a player in the game. Can be a human or an AI bot.
 class Player {
+  /// Creates a [Player].
   const Player({
     required this.id,
     required this.displayName,
@@ -55,6 +74,7 @@ class Player {
     this.hand = const [],
   });
 
+  /// Creates a [Player] from a JSON map.
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
       id: json['id'] as String,
@@ -73,13 +93,26 @@ class Player {
           const [],
     );
   }
+
+  /// Unique identifier.
   final String id;
+
+  /// Player display name.
   final String displayName;
+
+  /// Whether the player is controlled by a bot.
   final bool isBot;
+
+  /// Optional bot personality configuration.
   final BotPersonality? botPersonality;
+
+  /// Current score.
   final int score;
+
+  /// Cards currently in hand.
   final List<CardModel> hand;
 
+  /// Returns a copy of this [Player] with updated values.
   Player copyWith({
     String? id,
     String? displayName,
@@ -98,6 +131,7 @@ class Player {
     );
   }
 
+  /// Converts this [Player] to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -112,20 +146,27 @@ class Player {
 
 /// Represents a single played card from a player.
 class PlayedCard {
+  /// Creates a [PlayedCard].
   const PlayedCard({
     required this.playerId,
     required this.card,
   });
 
+  /// Creates a [PlayedCard] from a JSON map.
   factory PlayedCard.fromJson(Map<String, dynamic> json) {
     return PlayedCard(
       playerId: json['playerId'] as String,
       card: CardModel.fromJson(json['card'] as Map<String, dynamic>),
     );
   }
+
+  /// Player identifier.
   final String playerId;
+
+  /// Card played by the player.
   final CardModel card;
 
+  /// Converts this [PlayedCard] to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'playerId': playerId,
@@ -136,6 +177,7 @@ class PlayedCard {
 
 /// Represents the current round of play.
 class Round {
+  /// Creates a [Round].
   const Round({
     required this.id,
     required this.judgeId,
@@ -144,6 +186,7 @@ class Round {
     this.winningPlayerId,
   });
 
+  /// Creates a [Round] from a JSON map.
   factory Round.fromJson(Map<String, dynamic> json) {
     return Round(
       id: json['id'] as String,
@@ -159,12 +202,23 @@ class Round {
       winningPlayerId: json['winningPlayerId'] as String?,
     );
   }
+
+  /// Unique identifier.
   final String id;
+
+  /// Player id for the round judge.
   final String judgeId;
+
+  /// Active adjective card for the round.
   final CardModel? currentAdjective;
+
+  /// Cards submitted for the round.
   final List<PlayedCard> playedCards;
+
+  /// Winning player id for the round, if available.
   final String? winningPlayerId;
 
+  /// Returns a copy of this [Round] with updated values.
   Round copyWith({
     String? id,
     String? judgeId,
@@ -181,6 +235,7 @@ class Round {
     );
   }
 
+  /// Converts this [Round] to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -192,17 +247,30 @@ class Round {
   }
 }
 
+/// Enumerates gamestatus values.
 enum GameStatus {
+  /// The lobby value.
   lobby,
+
+  /// The dealing value.
   dealing,
+
+  /// The playersPlaying value.
   playersPlaying,
+
+  /// The judging value.
   judging,
+
+  /// The scoring value.
   scoring,
+
+  /// The finished value.
   finished,
 }
 
 /// Represents the top-level game room and state.
 class GameRoom {
+  /// Creates a [GameRoom].
   const GameRoom({
     required this.id,
     required this.joinCode,
@@ -214,6 +282,7 @@ class GameRoom {
     this.roundNumber = 0,
   });
 
+  /// Creates a [GameRoom] from a JSON map.
   factory GameRoom.fromJson(Map<String, dynamic> json) {
     return GameRoom(
       id: json['id'] as String,
@@ -232,15 +301,32 @@ class GameRoom {
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] as int),
     );
   }
+
+  /// Unique identifier.
   final String id;
+
+  /// Room join code.
   final String joinCode;
+
+  /// Host player id.
   final String hostId;
+
+  /// Players currently in the room.
   final List<Player> players;
+
+  /// Current game state status.
   final GameStatus status;
+
+  /// Current round data, if available.
   final Round? currentRound;
+
+  /// Current round number.
   final int roundNumber;
+
+  /// Room creation timestamp.
   final DateTime createdAt;
 
+  /// Returns a copy of this [GameRoom] with updated values.
   GameRoom copyWith({
     String? id,
     String? joinCode,
@@ -263,6 +349,7 @@ class GameRoom {
     );
   }
 
+  /// Converts this [GameRoom] to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,

@@ -19,6 +19,10 @@ import 'package:judgy/ui/screens/settings_screen.dart';
 import 'package:judgy/ui/widgets/consent_banner.dart';
 import 'package:provider/provider.dart';
 
+/// Configures app-wide system UI behavior used at startup.
+///
+/// This locks the app to portrait orientations and enables edge-to-edge UI.
+@visibleForTesting
 Future<void> setupSystemChrome() async {
   // Lock to portrait mode
   await SystemChrome.setPreferredOrientations([
@@ -30,6 +34,11 @@ Future<void> setupSystemChrome() async {
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 }
 
+/// Initializes Firebase and App Check for the current platform.
+///
+/// If Firebase is not configured for the current environment, initialization
+/// failures are logged and startup continues.
+@visibleForTesting
 Future<void> setupFirebase() async {
   try {
     await Firebase.initializeApp(
@@ -40,7 +49,9 @@ Future<void> setupFirebase() async {
         // TODO(bramp): Change this to a Firebase Remote Config value.
         '6Leu_o0sAAAAAP5iWQ8b0h3YniO1FHEY5Y9uOq7O',
       ),
-      // TODO(bramp): Add providers for Android and iOS when we set up App Check for those platforms.
+      // TODO(bramp): Add providers for Android and iOS when we set
+      // up App Check for those platforms.
+      //
       // providerAndroid: const AndroidPlayIntegrityProvider(),
       // providerApple: const AppleDeviceCheckProvider(),
     );
@@ -49,6 +60,10 @@ Future<void> setupFirebase() async {
   }
 }
 
+/// Creates and initializes the app services required before [runApp].
+///
+/// Returns a service map consumed by `main` to wire providers.
+@visibleForTesting
 Future<Map<String, dynamic>> initializeServices() async {
   final preferencesService = await PreferencesService.init();
   final consentService = ConsentService(preferencesService);
@@ -123,7 +138,9 @@ final _router = GoRouter(
   ],
 );
 
+/// Main app shell for Judgy.
 class JudgyApp extends StatelessWidget {
+  /// Root application widget that wires router, theming, and global overlays.
   const JudgyApp({super.key});
 
   @override

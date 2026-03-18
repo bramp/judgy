@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:judgy/models/game_models.dart';
 import 'package:judgy/services/preferences_service.dart';
 
+/// Service for deck operations.
 class DeckService extends ChangeNotifier {
+  /// Documents this public API member.
   DeckService(this._preferencesService);
 
   final PreferencesService _preferencesService;
@@ -24,9 +26,14 @@ class DeckService extends ChangeNotifier {
   Set<String> _enabledPaths = {};
 
   bool _isInitialized = false;
+
+  /// Documents this public API member.
   bool get isInitialized => _isInitialized;
 
+  /// Documents this public API member.
   Map<String, Set<String>> get nounCategoryMap => _nounCategoryMap;
+
+  /// Documents this public API member.
   Set<String> get adjectiveCategories => _adjectiveCategories;
 
   /// Returns a map of category -> enabled status for adjectives
@@ -53,15 +60,18 @@ class DeckService extends ChangeNotifier {
     return status;
   }
 
+  /// Documents this public API member.
   bool isAdjectiveCategoryEnabled(String category) {
     return _enabledPaths.contains(category);
   }
 
+  /// Documents this public API member.
   bool isNounSubcategoryEnabled(String category, String subcategory) {
     final path = '$category$_pathSeparator$subcategory';
     return _enabledPaths.contains(path);
   }
 
+  /// Initializes the service.
   Future<void> init() async {
     if (_isInitialized) return;
 
@@ -140,6 +150,7 @@ class DeckService extends ChangeNotifier {
     }
   }
 
+  /// Executes toggleAdjectiveCategory.
   void toggleAdjectiveCategory(String category, {required bool isEnabled}) {
     if (isEnabled) {
       _enabledPaths.add(category);
@@ -153,6 +164,7 @@ class DeckService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Executes toggleNounSubcategory.
   void toggleNounSubcategory(
     String category,
     String subcategory, {
@@ -184,6 +196,7 @@ class DeckService extends ChangeNotifier {
     );
   }
 
+  /// Documents this public API member.
   List<CardModel> getActiveAdjectives() {
     final list = _allAdjectives
         .where((c) => _enabledPaths.contains(c.category))
@@ -191,6 +204,7 @@ class DeckService extends ChangeNotifier {
     return list.isNotEmpty ? list : _allAdjectives.toList();
   }
 
+  /// Documents this public API member.
   List<CardModel> getActiveNouns() {
     final list = _allNouns.where((c) {
       if (c.category == null) return false;
@@ -251,7 +265,9 @@ class DeckService extends ChangeNotifier {
       if (text.isNotEmpty && category.isNotEmpty && subcategory.isNotEmpty) {
         cards.add(
           CardModel(
-            id: 'noun_${category.hashCode}_${subcategory.hashCode}_${idCounter++}',
+            id:
+                'noun_${category.hashCode}_${subcategory.hashCode}'
+                '_${idCounter++}',
             text: text,
             type: CardType.noun,
             category: category,

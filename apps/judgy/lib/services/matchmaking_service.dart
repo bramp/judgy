@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:judgy/models/game_models.dart';
 import 'package:uuid/uuid.dart';
 
+/// Service for matchmaking operations.
 class MatchmakingService {
+  /// Documents this public API member.
   MatchmakingService({FirebaseFirestore? firestore, Uuid? uuid})
     : _firestore = firestore ?? FirebaseFirestore.instance,
       _uuid = uuid ?? const Uuid();
@@ -17,7 +19,9 @@ class MatchmakingService {
   ) async {
     final roomId = _uuid.v4();
     // A simple 4-character join code.
-    // TODOLet's make this 8 characters - and I don't want to use a uuid - since the first 4 chars of a uuid are not very random - we can just generate a random 8 char code instead.
+    // TODO(bramp): Let's make this 8 characters - and I don't
+    // want to use a uuid - since the first 4 chars of a uuid are
+    // not very random - we can just generate a random 8 char code instead.
     final joinCode = _uuid.v4().substring(0, 4).toUpperCase();
 
     final hostPlayer = Player(

@@ -11,6 +11,7 @@ import 'package:judgy/services/preferences_service.dart';
 /// necessary and does not require consent.  Analytics (Firebase) is optional
 /// and requires an explicit opt-in.
 class ConsentService extends ChangeNotifier {
+  /// Documents this public API member.
   ConsentService(this._prefs, {this.debugOverride = kDebugMode}) {
     _analyticsConsent = _prefs.getBool(_keyAnalyticsConsent);
 

@@ -16,6 +16,7 @@ Future<void> showSettingsDialog(BuildContext context) {
 
 /// A dialog containing app info and privacy settings.
 class SettingsDialog extends StatelessWidget {
+  /// Creates a [SettingsDialog].
   const SettingsDialog({super.key});
 
   @override

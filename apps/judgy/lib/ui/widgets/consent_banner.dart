@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// The user can accept or decline analytics; game-save storage is always on
 /// because it is strictly necessary for the app to function.
 class ConsentBanner extends StatefulWidget {
+  /// Creates a [ConsentBanner].
   const ConsentBanner({super.key});
 
   @override
