@@ -43,3 +43,24 @@ cd apps/judgy
 ./scripts/push_prompt_templates.sh
 ```
 *Note: Because the API is in preview, the REST API payload requirements might change. Using the Console UI is currently the most stable approach.*
+
+## Sync Card Data From Google Sheets
+
+Use the helper script below to export the first 4 visible tabs from the shared sheet into CSV files in `assets/data/`.
+
+```bash
+cd ../..
+./scripts/fetch_sheet_tabs.sh
+```
+
+Requirements:
+- `gws` (Google Workspace CLI)
+- `jq`
+
+Optional mapping (for exact filenames):
+
+```bash
+./scripts/fetch_sheet_tabs.sh \
+   --map "Nouns=nouns.csv" \
+   --map "Adjectives=adjectives.csv"
+```
