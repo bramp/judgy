@@ -18,43 +18,44 @@ void main() {
       expect(adjectiveCategoryRows, isNotEmpty);
       expect(nounCategoryRows, isNotEmpty);
 
-      final adjectiveCategories = <String>{};
+      // Build set of valid adjective category IDs.
+      final adjectiveCategoryIds = <String>{};
       final adjectiveCategoryHeader = _headerIndex(adjectiveCategoryRows.first);
-      final adjectiveCategoryIndex = adjectiveCategoryHeader['category'] ?? 1;
+      final adjectiveCategoryIdIndex = adjectiveCategoryHeader['id'] ?? 0;
 
       for (final row in adjectiveCategoryRows.skip(1)) {
-        final category = _cell(row, adjectiveCategoryIndex);
-        if (category.isNotEmpty) {
-          adjectiveCategories.add(category);
+        final id = _cell(row, adjectiveCategoryIdIndex);
+        if (id.isNotEmpty) {
+          adjectiveCategoryIds.add(id);
         }
       }
 
-      final nounCategoryPaths = <String>{};
+      // Build set of valid noun category IDs.
+      final nounCategoryIds = <String>{};
       final nounCategoryHeader = _headerIndex(nounCategoryRows.first);
-      final nounCategoryIndex = nounCategoryHeader['category'] ?? 1;
-      final nounSubcategoryIndex = nounCategoryHeader['subcategory'] ?? 2;
+      final nounCategoryIdIndex = nounCategoryHeader['id'] ?? 0;
 
       for (final row in nounCategoryRows.skip(1)) {
-        final category = _cell(row, nounCategoryIndex);
-        final subcategory = _cell(row, nounSubcategoryIndex);
-        if (category.isNotEmpty && subcategory.isNotEmpty) {
-          nounCategoryPaths.add('$category|$subcategory');
+        final id = _cell(row, nounCategoryIdIndex);
+        if (id.isNotEmpty) {
+          nounCategoryIds.add(id);
         }
       }
 
-      final adjectiveCardCategories = <String>{};
+      // Validate adjectives reference valid category IDs.
+      final usedAdjectiveCategoryIds = <String>{};
       final adjectiveHeader = _headerIndex(adjectivesRows.first);
-      final adjectiveCardCategoryIndex = adjectiveHeader['category'] ?? 0;
-      final adjectiveTextIndex = adjectiveHeader['adjective'] ?? 1;
+      final adjectiveCategoryIdColIndex = adjectiveHeader['category_id'] ?? 1;
+      final adjectiveTextIndex = adjectiveHeader['adjective'] ?? 2;
 
       for (final row in adjectivesRows.skip(1)) {
-        final category = _cell(row, adjectiveCardCategoryIndex);
+        final categoryId = _cell(row, adjectiveCategoryIdColIndex);
         final adjective = _cell(row, adjectiveTextIndex);
 
         expect(
-          category,
+          categoryId,
           isNotEmpty,
-          reason: 'Adjective row missing category: $row',
+          reason: 'Adjective row missing category_id: $row',
         );
         expect(
           adjective,
@@ -62,62 +63,65 @@ void main() {
           reason: 'Adjective row missing adjective text: $row',
         );
         expect(
-          adjectiveCategories.contains(category),
+          adjectiveCategoryIds.contains(categoryId),
           isTrue,
           reason:
-              'Adjective category "$category" is not defined in adjective_categories.csv',
+              'Adjective category_id "$categoryId" is not defined in adjective_categories.csv',
         );
 
-        adjectiveCardCategories.add(category);
+        usedAdjectiveCategoryIds.add(categoryId);
       }
 
-      final nounCardPaths = <String>{};
+      // Validate nouns reference valid category IDs.
+      final usedNounCategoryIds = <String>{};
       final nounHeader = _headerIndex(nounsRows.first);
-      final nounCardCategoryIndex = nounHeader['category'] ?? 0;
-      final nounCardSubcategoryIndex = nounHeader['subcategory'] ?? 1;
+      final nounCategoryIdColIndex = nounHeader['category_id'] ?? 1;
       final nounTextIndex = nounHeader['noun'] ?? 2;
 
       for (final row in nounsRows.skip(1)) {
-        final category = _cell(row, nounCardCategoryIndex);
-        final subcategory = _cell(row, nounCardSubcategoryIndex);
+        final categoryId = _cell(row, nounCategoryIdColIndex);
         final noun = _cell(row, nounTextIndex);
 
-        expect(category, isNotEmpty, reason: 'Noun row missing category: $row');
         expect(
-          subcategory,
+          categoryId,
           isNotEmpty,
-          reason: 'Noun row missing subcategory: $row',
+          reason: 'Noun row missing category_id: $row',
         );
-        expect(noun, isNotEmpty, reason: 'Noun row missing noun text: $row');
-
-        final path = '$category|$subcategory';
         expect(
-          nounCategoryPaths.contains(path),
+          noun,
+          isNotEmpty,
+          reason: 'Noun row missing noun text: $row',
+        );
+        expect(
+          nounCategoryIds.contains(categoryId),
           isTrue,
-          reason: 'Noun path "$path" is not defined in noun_categories.csv',
+          reason:
+              'Noun category_id "$categoryId" is not defined in noun_categories.csv',
         );
 
-        nounCardPaths.add(path);
+        usedNounCategoryIds.add(categoryId);
       }
 
-      final adjectiveCategoriesWithoutCards = adjectiveCategories.difference(
-        adjectiveCardCategories,
+      final adjectiveCategoriesWithoutCards = adjectiveCategoryIds.difference(
+        usedAdjectiveCategoryIds,
       );
       expect(
         adjectiveCategoriesWithoutCards,
         isEmpty,
         reason:
-            'Categories in adjective_categories.csv missing cards: '
+            'IDs in adjective_categories.csv missing cards: '
             '${adjectiveCategoriesWithoutCards.toList()}',
       );
 
-      final nounPathsWithoutCards = nounCategoryPaths.difference(nounCardPaths);
+      final nounCategoriesWithoutCards = nounCategoryIds.difference(
+        usedNounCategoryIds,
+      );
       expect(
-        nounPathsWithoutCards,
+        nounCategoriesWithoutCards,
         isEmpty,
         reason:
-            'Paths in noun_categories.csv missing cards: '
-            '${nounPathsWithoutCards.toList()}',
+            'IDs in noun_categories.csv missing cards: '
+            '${nounCategoriesWithoutCards.toList()}',
       );
     });
   });

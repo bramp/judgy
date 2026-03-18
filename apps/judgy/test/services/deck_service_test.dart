@@ -16,31 +16,31 @@ void main() {
     late DeckService deckService;
 
     const mockAdjectivesCsv = '''
-Category,Adjective,Description
-Cool,Awesome,Something awesome
-Cool,Rad,Something rad
-Bad,Terrible,Something terrible
+id,category_id,adjective,description
+a-awesome,ac-cool,Awesome,Something awesome
+a-rad,ac-cool,Rad,Something rad
+a-terrible,ac-bad,Terrible,Something terrible
 ''';
 
     const mockNounsCsv = '''
-Category,SubCategory,Noun,Description
-Animals,Mammals,Dog,A good boy
-Animals,Mammals,Cat,A good girl
-Things,Objects,Rock,A solid object
-Things,Objects,Tree,A living thing
+id,category_id,noun,description
+n-dog,nc-animals_mammals,Dog,A good boy
+n-cat,nc-animals_mammals,Cat,A good girl
+n-rock,nc-things_objects,Rock,A solid object
+n-tree,nc-things_objects,Tree,A living thing
 ''';
 
     const mockAdjectiveCategoriesCsv = '''
-  id,category
-  ac-cool,Cool
-  ac-bad,Bad
-  ''';
+id,category
+ac-cool,Cool
+ac-bad,Bad
+''';
 
     const mockNounCategoriesCsv = '''
-  id,category,subcategory
-  nc-animals_mammals,Animals,Mammals
-  nc-things_objects,Things,Objects
-  ''';
+id,category,subcategory
+nc-animals_mammals,Animals,Mammals
+nc-things_objects,Things,Objects
+''';
 
     setUp(() {
       mockPrefs = MockPreferencesService();

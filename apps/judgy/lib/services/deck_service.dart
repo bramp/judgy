@@ -1,8 +1,8 @@
-import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:judgy/models/game_models.dart';
 import 'package:judgy/services/preferences_service.dart';
+import 'package:judgy/utils/deck_parser.dart';
 
 /// Service for deck operations.
 class DeckService extends ChangeNotifier {
@@ -84,18 +84,24 @@ class DeckService extends ChangeNotifier {
       'assets/data/noun_categories.csv',
     );
 
-    _allAdjectives = _parseAdjectivesCsv(adjCsv);
-    _allNouns = _parseNounsCsv(nounCsv);
-    final adjectiveCategoryDefs = _parseAdjectiveCategoriesCsv(adjCategoryCsv);
-    final nounCategoryDefs = _parseNounCategoriesCsv(nounCategoryCsv);
+    final adjCategoryIdMap = DeckParser.parseAdjectiveCategoriesCsv(
+      adjCategoryCsv,
+    );
+    final nounCategoryIdMap = DeckParser.parseNounCategoriesCsv(
+      nounCategoryCsv,
+    );
+
+    _allAdjectives = DeckParser.parseAdjectivesCsv(adjCsv, adjCategoryIdMap);
+    _allNouns = DeckParser.parseNounsCsv(nounCsv, nounCategoryIdMap);
 
     _adjectiveCategories
       ..clear()
-      ..addAll(adjectiveCategoryDefs);
+      ..addAll(adjCategoryIdMap.values);
 
-    _nounCategoryMap
-      ..clear()
-      ..addAll(nounCategoryDefs);
+    _nounCategoryMap.clear();
+    for (final (category, subcategory) in nounCategoryIdMap.values) {
+      _nounCategoryMap.putIfAbsent(category, () => <String>{}).add(subcategory);
+    }
 
     _validateDeckData();
 
@@ -212,173 +218,6 @@ class DeckService extends ChangeNotifier {
       return _enabledPaths.contains(path);
     }).toList();
     return list.isNotEmpty ? list : _allNouns.toList();
-  }
-
-  List<CardModel> _parseAdjectivesCsv(String csvString) {
-    final rows = const CsvDecoder().convert(csvString);
-    if (rows.length < 2) return <CardModel>[];
-
-    final headerIndex = _buildHeaderIndex(rows.first);
-    final categoryIndex = _indexFor(headerIndex, 'category', fallback: 0);
-    final adjectiveIndex = _indexFor(headerIndex, 'adjective', fallback: 1);
-
-    final cards = <CardModel>[];
-    var idCounter = 1;
-    for (final row in rows.skip(1)) {
-      if (row.isEmpty) continue;
-
-      final category = _csvCell(row, categoryIndex);
-      final text = _csvCell(row, adjectiveIndex);
-
-      if (text.isNotEmpty && category.isNotEmpty) {
-        cards.add(
-          CardModel(
-            id: 'adjective_${category.hashCode}_${idCounter++}',
-            text: text,
-            type: CardType.adjective,
-            category: category,
-          ),
-        );
-      }
-    }
-    return cards;
-  }
-
-  List<CardModel> _parseNounsCsv(String csvString) {
-    final rows = const CsvDecoder().convert(csvString);
-    if (rows.length < 2) return <CardModel>[];
-
-    final headerIndex = _buildHeaderIndex(rows.first);
-    final categoryIndex = _indexFor(headerIndex, 'category', fallback: 0);
-    final subcategoryIndex = _indexFor(headerIndex, 'subcategory', fallback: 1);
-    final nounIndex = _indexFor(headerIndex, 'noun', fallback: 2);
-
-    final cards = <CardModel>[];
-    var idCounter = 1;
-    for (final row in rows.skip(1)) {
-      if (row.isEmpty) continue;
-
-      final category = _csvCell(row, categoryIndex);
-      final subcategory = _csvCell(row, subcategoryIndex);
-      final text = _csvCell(row, nounIndex);
-
-      if (text.isNotEmpty && category.isNotEmpty && subcategory.isNotEmpty) {
-        cards.add(
-          CardModel(
-            id:
-                'noun_${category.hashCode}_${subcategory.hashCode}'
-                '_${idCounter++}',
-            text: text,
-            type: CardType.noun,
-            category: category,
-            subcategory: subcategory,
-          ),
-        );
-      }
-    }
-    return cards;
-  }
-
-  Set<String> _parseAdjectiveCategoriesCsv(String csvString) {
-    final rows = const CsvDecoder().convert(csvString);
-    if (rows.length < 2) {
-      throw const FormatException(
-        'No adjective categories found in adjective_categories.csv.',
-      );
-    }
-
-    final headerIndex = _buildHeaderIndex(rows.first);
-    final categoryIndex = _indexFor(headerIndex, 'category', fallback: 1);
-
-    final categories = <String>{};
-
-    for (final row in rows.skip(1)) {
-      if (row.isEmpty) continue;
-
-      final category = _csvCell(row, categoryIndex);
-      if (category.isEmpty) continue;
-
-      if (!categories.add(category)) {
-        throw FormatException(
-          'Duplicate adjective category found in adjective_categories.csv: '
-          '$category',
-        );
-      }
-    }
-
-    if (categories.isEmpty) {
-      throw const FormatException(
-        'No adjective categories found in adjective_categories.csv.',
-      );
-    }
-
-    return categories;
-  }
-
-  Map<String, Set<String>> _parseNounCategoriesCsv(String csvString) {
-    final rows = const CsvDecoder().convert(csvString);
-    if (rows.length < 2) {
-      throw const FormatException(
-        'No noun categories found in noun_categories.csv.',
-      );
-    }
-
-    final headerIndex = _buildHeaderIndex(rows.first);
-    final categoryIndex = _indexFor(headerIndex, 'category', fallback: 1);
-    final subcategoryIndex = _indexFor(headerIndex, 'subcategory', fallback: 2);
-
-    final categoryMap = <String, Set<String>>{};
-
-    for (final row in rows.skip(1)) {
-      if (row.isEmpty) continue;
-
-      final category = _csvCell(row, categoryIndex);
-      final subcategory = _csvCell(row, subcategoryIndex);
-
-      if (category.isEmpty || subcategory.isEmpty) {
-        continue;
-      }
-
-      final subcategories = categoryMap.putIfAbsent(category, () => <String>{});
-      if (!subcategories.add(subcategory)) {
-        throw FormatException(
-          'Duplicate noun category path found in noun_categories.csv: '
-          '$category$_pathSeparator$subcategory',
-        );
-      }
-    }
-
-    if (categoryMap.isEmpty) {
-      throw const FormatException(
-        'No noun categories found in noun_categories.csv.',
-      );
-    }
-
-    return categoryMap;
-  }
-
-  Map<String, int> _buildHeaderIndex(List<dynamic> headerRow) {
-    final index = <String, int>{};
-    for (var i = 0; i < headerRow.length; i++) {
-      final key = headerRow[i].toString().trim().toLowerCase();
-      if (key.isNotEmpty) {
-        index[key] = i;
-      }
-    }
-    return index;
-  }
-
-  int _indexFor(
-    Map<String, int> headerIndex,
-    String name, {
-    required int fallback,
-  }) {
-    return headerIndex[name] ?? fallback;
-  }
-
-  String _csvCell(List<dynamic> row, int index) {
-    if (index < 0 || index >= row.length) return '';
-    return row[index].toString().trim();
   }
 
   void _validateDeckData() {
