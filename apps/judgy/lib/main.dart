@@ -19,10 +19,7 @@ import 'package:judgy/ui/screens/settings_screen.dart';
 import 'package:judgy/ui/widgets/consent_banner.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
+Future<void> setupSystemChrome() async {
   // Lock to portrait mode
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -31,28 +28,54 @@ void main() async {
 
   // Enable edge-to-edge mode (especially for modern Android)
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+}
 
+Future<void> setupFirebase() async {
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await FirebaseAppCheck.instance.activate(
       providerWeb: ReCaptchaV3Provider(
+        // TODO(bramp): Change this to a Firebase Remote Config value.
         '6Leu_o0sAAAAAP5iWQ8b0h3YniO1FHEY5Y9uOq7O',
       ),
-      providerAndroid: AndroidProvider.playIntegrity,
-      providerApple: AppleProvider.deviceCheck,
+      providerAndroid: const AndroidPlayIntegrityProvider(),
+      providerApple: const AppleDeviceCheckProvider(),
     );
   } on Object catch (e) {
     debugPrint('Firebase initialization failed (not configured?): $e');
   }
+}
 
+Future<Map<String, dynamic>> initializeServices() async {
   final preferencesService = await PreferencesService.init();
   final consentService = ConsentService(preferencesService);
   final deckService = DeckService(preferencesService);
   final analyticsService = AnalyticsService(consentService);
   final authService = AuthService();
   await deckService.init();
+
+  return {
+    'consentService': consentService,
+    'deckService': deckService,
+    'analyticsService': analyticsService,
+    'authService': authService,
+  };
+}
+
+void main() async {
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  await setupSystemChrome();
+  await setupFirebase();
+
+  final services = await initializeServices();
+  final consentService = services['consentService'] as ConsentService;
+  final deckService = services['deckService'] as DeckService;
+  final analyticsService = services['analyticsService'] as AnalyticsService;
+  final authService = services['authService'] as AuthService;
 
   FlutterNativeSplash.remove();
 
