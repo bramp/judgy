@@ -3,12 +3,14 @@
 import 'package:judgy/models/bot_personality.dart';
 
 /// Represents a playing card (either an Adjective or a Noun).
+// TODO(bramp): Drop the "Model" suffix from these class names, since it's redundant in Dart. Just "Card", "Player", etc.
 class CardModel {
   const CardModel({
     required this.id,
     required this.text,
     required this.type,
     this.category,
+    this.subcategory,
   });
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
@@ -17,12 +19,14 @@ class CardModel {
       text: json['text'] as String,
       type: CardType.values.byName(json['type'] as String),
       category: json['category'] as String?,
+      subcategory: json['subcategory'] as String?,
     );
   }
   final String id;
   final String text;
   final CardType type;
   final String? category;
+  final String? subcategory;
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,6 +34,7 @@ class CardModel {
       'text': text,
       'type': type.name,
       if (category != null) 'category': category,
+      if (subcategory != null) 'subcategory': subcategory,
     };
   }
 }

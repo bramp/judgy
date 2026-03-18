@@ -40,8 +40,9 @@ Future<void> setupFirebase() async {
         // TODO(bramp): Change this to a Firebase Remote Config value.
         '6Leu_o0sAAAAAP5iWQ8b0h3YniO1FHEY5Y9uOq7O',
       ),
-      providerAndroid: const AndroidPlayIntegrityProvider(),
-      providerApple: const AppleDeviceCheckProvider(),
+      // TODO(bramp): Add providers for Android and iOS when we set up App Check for those platforms.
+      // providerAndroid: const AndroidPlayIntegrityProvider(),
+      // providerApple: const AppleDeviceCheckProvider(),
     );
   } on Object catch (e) {
     debugPrint('Firebase initialization failed (not configured?): $e');

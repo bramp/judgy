@@ -33,6 +33,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   mocktail: ^1.0.4
   very_good_analysis: ^10.2.0
   widgetbook: ^3.22.0
@@ -45,6 +47,8 @@ flutter:
     - assets/data/bots.json
     - assets/data/nouns.csv
     - assets/data/adjectives.csv
+    - assets/data/noun_categories.csv
+    - assets/data/adjective_categories.csv
 
 flutter_native_splash:
   color: "#0D0E15"

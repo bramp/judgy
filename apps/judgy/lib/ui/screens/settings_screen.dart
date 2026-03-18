@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:judgy/build_info.dart';
 import 'package:judgy/services/consent_service.dart';
-import 'package:judgy/services/deck_service.dart';
+import 'package:judgy/ui/screens/deck_settings_screen.dart';
 import 'package:provider/provider.dart';
 
 /// Shows the settings dialog as an overlay on top of the current screen.
@@ -19,7 +21,6 @@ class SettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final consentService = context.watch<ConsentService>();
-    final deckService = context.watch<DeckService>();
     final theme = Theme.of(context);
 
     return Dialog(
@@ -62,19 +63,24 @@ class SettingsDialog extends StatelessWidget {
 
                   // ── Deck Categories ────────────────────
                   _SectionHeader(title: 'Deck Categories', theme: theme),
-                  for (final category in deckService.availableCategories)
-                    CheckboxListTile(
-                      title: Text(category),
-                      value: deckService.enabledCategories.contains(category),
-                      onChanged: (value) {
-                        if (value != null) {
-                          deckService.toggleCategory(
-                            category,
-                            isEnabled: value,
-                          );
-                        }
-                      },
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    trailing: const Icon(Icons.settings),
+                    title: const Text('Manage card categories'),
+                    subtitle: const Text(
+                      'Customize which categories are active',
                     ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      unawaited(
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const DeckSettingsScreen(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
 
                   const Divider(),
 

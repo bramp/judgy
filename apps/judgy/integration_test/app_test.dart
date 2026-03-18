@@ -7,19 +7,19 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Judgy Integration Tests', () {
-    testWidgets('App launches and displays', (WidgetTester tester) async {
-      await tester.pumpWidget(const MyApp());
+    testWidgets('App launches and displays', (tester) async {
+      await tester.pumpWidget(const JudgyApp());
       await tester.pumpAndSettle();
 
       // Verify the app is running
       expect(find.byType(MaterialApp), findsOneWidget);
     });
 
-    testWidgets('Navigation works', (WidgetTester tester) async {
-      await tester.pumpWidget(const MyApp());
+    testWidgets('Navigation works', (tester) async {
+      await tester.pumpWidget(const JudgyApp());
       await tester.pumpAndSettle();
 
-      // TODO: Add navigation tests after UI is implemented
+      // TODO(bramp): Add navigation tests after UI is implemented.
       // Example: Tap on a button and verify new screen appears
     });
   });

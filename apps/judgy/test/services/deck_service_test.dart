@@ -16,18 +16,31 @@ void main() {
     late DeckService deckService;
 
     const mockAdjectivesCsv = '''
-Category,Adjective,Optional
-Cool,Awesome
-Cool,Rad
-Bad,Terrible
+Category,Adjective,Description
+Cool,Awesome,Something awesome
+Cool,Rad,Something rad
+Bad,Terrible,Something terrible
 ''';
 
     const mockNounsCsv = '''
-Category,Noun,Text
-Animals,Dog,A good boy
-Animals,Cat,A good girl
-Things,Rock,A solid object
+Category,SubCategory,Noun,Description
+Animals,Mammals,Dog,A good boy
+Animals,Mammals,Cat,A good girl
+Things,Objects,Rock,A solid object
+Things,Objects,Tree,A living thing
 ''';
+
+    const mockAdjectiveCategoriesCsv = '''
+  id,category
+  ac-cool,Cool
+  ac-bad,Bad
+  ''';
+
+    const mockNounCategoriesCsv = '''
+  id,category,subcategory
+  nc-animals_mammals,Animals,Mammals
+  nc-things_objects,Things,Objects
+  ''';
 
     setUp(() {
       mockPrefs = MockPreferencesService();
@@ -47,6 +60,16 @@ Things,Rock,A solid object
               return ByteData.view(
                 Uint8List.fromList(utf8.encode(mockNounsCsv)).buffer,
               );
+            } else if (key.contains('adjective_categories.csv')) {
+              return ByteData.view(
+                Uint8List.fromList(
+                  utf8.encode(mockAdjectiveCategoriesCsv),
+                ).buffer,
+              );
+            } else if (key.contains('noun_categories.csv')) {
+              return ByteData.view(
+                Uint8List.fromList(utf8.encode(mockNounCategoriesCsv)).buffer,
+              );
             }
             return null;
           });
@@ -64,8 +87,12 @@ Things,Rock,A solid object
 
       expect(deckService.isInitialized, isTrue);
       expect(
-        deckService.availableCategories,
-        containsAll(['Cool', 'Bad', 'Animals', 'Things']),
+        deckService.adjectiveCategories,
+        containsAll(['Cool', 'Bad']),
+      );
+      expect(
+        deckService.nounCategoryMap.keys,
+        containsAll(['Animals', 'Things']),
       );
 
       final activeAdjectives = deckService.getActiveAdjectives();
@@ -74,18 +101,20 @@ Things,Rock,A solid object
       expect(activeAdjectives.first.category, 'Cool');
 
       final activeNouns = deckService.getActiveNouns();
-      expect(activeNouns.length, 3);
-      expect(activeNouns.first.text, 'A good boy'); // index 2
-      expect(activeNouns.first.type, CardType.noun);
+      expect(activeNouns.length, 4);
+      expect(activeNouns[0].text, 'Dog');
+      expect(activeNouns[0].category, 'Animals');
+      expect(activeNouns[0].subcategory, 'Mammals');
+      expect(activeNouns[0].type, CardType.noun);
     });
 
-    test('toggling categories filters active cards', () async {
+    test('toggling adjective categories filters active cards', () async {
       await deckService.init();
 
       // Disable 'Cool'
-      deckService.toggleCategory('Cool', isEnabled: false);
+      deckService.toggleAdjectiveCategory('Cool', isEnabled: false);
 
-      expect(deckService.enabledCategories, isNot(contains('Cool')));
+      expect(deckService.isAdjectiveCategoryEnabled('Cool'), isFalse);
 
       final activeAdjectives = deckService.getActiveAdjectives();
       // Only 'Bad' should be left (Terrible)
@@ -98,20 +127,59 @@ Things,Rock,A solid object
       ).called(1);
     });
 
-    test('prevents disabling the last category', () async {
+    test('toggling noun subcategories filters active cards', () async {
       await deckService.init();
 
-      // Disable all but one
-      deckService.toggleCategory('Cool', isEnabled: false);
-      deckService.toggleCategory('Bad', isEnabled: false);
-      deckService.toggleCategory('Things', isEnabled: false);
+      // Disable 'Mammals' in 'Animals'
+      deckService.toggleNounSubcategory(
+        'Animals',
+        'Mammals',
+        isEnabled: false,
+      );
 
-      // Now 'Animals' is the only one left. Try shutting it off.
-      deckService.toggleCategory('Animals', isEnabled: false);
+      expect(
+        deckService.isNounSubcategoryEnabled('Animals', 'Mammals'),
+        isFalse,
+      );
+
+      final activeNouns = deckService.getActiveNouns();
+      // Only 'Things' subcategories should remain
+      expect(activeNouns.length, 2);
+      expect(activeNouns.every((c) => c.category == 'Things'), isTrue);
+    });
+
+    test('prevents disabling the last category/subcategory', () async {
+      await deckService.init();
+
+      // Disable all adjectives except 'Bad'
+      deckService.toggleAdjectiveCategory('Cool', isEnabled: false);
+
+      // Disable all noun subcategories except 'Things|Objects'
+      deckService.toggleNounSubcategory('Animals', 'Mammals', isEnabled: false);
+      deckService.toggleNounSubcategory('Things', 'Objects', isEnabled: false);
+
+      // Now try to disable 'Bad' - should not work
+      deckService.toggleAdjectiveCategory('Bad', isEnabled: false);
 
       // It should still be enabled
-      expect(deckService.enabledCategories, contains('Animals'));
-      expect(deckService.enabledCategories.length, 1);
+      expect(deckService.isAdjectiveCategoryEnabled('Bad'), isTrue);
+    });
+
+    test('gets correct category status maps', () async {
+      await deckService.init();
+
+      final adjStatus = deckService.getAdjectiveStatus();
+      expect(adjStatus['Cool'], isTrue);
+      expect(adjStatus['Bad'], isTrue);
+
+      final nounStatus = deckService.getNounStatus();
+      expect(nounStatus['Animals']?['Mammals'], isTrue);
+      expect(nounStatus['Things']?['Objects'], isTrue);
+
+      // Toggle and check
+      deckService.toggleNounSubcategory('Animals', 'Mammals', isEnabled: false);
+      final updatedNounStatus = deckService.getNounStatus();
+      expect(updatedNounStatus['Animals']?['Mammals'], isFalse);
     });
   });
 }
