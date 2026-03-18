@@ -3,7 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:judgy/models/game_models.dart';
 
 class GameLoopService extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  GameLoopService({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
+
+  final FirebaseFirestore _firestore;
 
   GameRoom? _currentRoom;
   GameRoom? get currentRoom => _currentRoom;

@@ -71,6 +71,17 @@ A multiplayer Apples-to-Apples style mobile/web game (Adjective vs. Noun) using 
 
 ## Misc
 
-- [] We have some JSON models - should we use some tooling to convert (instead of writing ourselves)
+- [] We have some JSON models - maybe we should use https://pub.dev/packages/json_serializable
 - [ ] Rewrite apps/judgy/assets/data/bots.json in terms of "what the bot is" and "how the bot is described to the other players"
 - [ ] Fix consent and privacy policies
+
+## Testing Checklist
+- [x] test/services/auth_service_test.dart (local mocktail tests)
+- [x] test/services/ai_bot_service_test.dart (local mocktail tests)
+- [x] test/services/analytics_service_test.dart
+- [x] test/services/consent_service_test.dart
+- [x] test/services/deck_service_test.dart
+- [x] test/services/game_loop_service_test.dart
+- [x] test/services/local_game_engine_test.dart
+- [x] test/services/matchmaking_service_test.dart
+- [x] test/services/preferences_service_test.dart

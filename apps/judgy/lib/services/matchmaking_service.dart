@@ -3,8 +3,12 @@ import 'package:judgy/models/game_models.dart';
 import 'package:uuid/uuid.dart';
 
 class MatchmakingService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Uuid _uuid = const Uuid();
+  MatchmakingService({FirebaseFirestore? firestore, Uuid? uuid})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _uuid = uuid ?? const Uuid();
+
+  final FirebaseFirestore _firestore;
+  final Uuid _uuid;
 
   /// Create a new private game room and return its ID.
   Future<String> createPrivateRoom(

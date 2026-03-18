@@ -11,19 +11,25 @@ import 'package:judgy/services/deck_service.dart';
 import 'package:uuid/uuid.dart';
 
 class LocalGameEngine extends ChangeNotifier {
-  LocalGameEngine(this._analyticsService, this._deckService);
+  LocalGameEngine(
+    this._analyticsService,
+    this._deckService, {
+    AIBotService? aiService,
+  }) : _aiService = aiService ?? AIBotService(),
+       _rnd = Random(),
+       _uuid = const Uuid();
 
   final AnalyticsService _analyticsService;
   final DeckService _deckService;
+  final AIBotService _aiService;
 
   GameRoom? _room;
   GameRoom? get room => _room;
 
   String get localPlayerId => 'player_local';
 
-  final Random _rnd = Random();
-  final Uuid _uuid = const Uuid();
-  final AIBotService _aiService = AIBotService();
+  final Random _rnd;
+  final Uuid _uuid;
 
   List<CardModel> _allAdjectives = [];
   List<CardModel> _allNouns = [];
