@@ -93,7 +93,7 @@ class AuthService extends ChangeNotifier {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
+          // AppleIDAuthorizationScopes.fullName,
         ],
       );
 

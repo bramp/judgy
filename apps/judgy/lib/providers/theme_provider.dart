@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO(bramp): I don't think we need this ThemeProvider - let's delete
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 

@@ -74,6 +74,7 @@ A multiplayer Apples-to-Apples style mobile/web game (Adjective vs. Noun) using 
 - [] We have some JSON models - maybe we should use https://pub.dev/packages/json_serializable
 - [ ] Rewrite apps/judgy/assets/data/bots.json in terms of "what the bot is" and "how the bot is described to the other players"
 - [ ] Fix consent and privacy policies
+- [ ] There are various keys in the app - I wonder if they should be stored in a config - so they can be compiled into the app.
 
 ## Testing Checklist
 - [x] test/services/auth_service_test.dart (local mocktail tests)

@@ -48,6 +48,7 @@ class ConsentService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Applies the current consent setting to Firebase Analytics.
   void _applyToFirebase() {
     try {
       if (Firebase.apps.isNotEmpty) {

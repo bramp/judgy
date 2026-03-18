@@ -58,6 +58,14 @@ class HomeScreen extends StatelessWidget {
               child: const Text('Play Local Game'),
             ),
             const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                unawaited(context.push('/settings'));
+              },
+              icon: const Icon(Icons.settings),
+              label: const Text('Settings'),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // TODO(bramp): Navigate to lobby/create game

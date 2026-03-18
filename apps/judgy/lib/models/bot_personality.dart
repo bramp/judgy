@@ -15,6 +15,7 @@ class BotPersonality {
     );
   }
 
+  // TODO(bramp): Add comments explaining each field and how it should be used.
   final String id;
   final String name;
   final String role;
