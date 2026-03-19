@@ -77,6 +77,8 @@ A multiplayer Apples-to-Apples style mobile/web game (Adjective vs. Noun) using 
 - [ ] There are various keys in the app - I wonder if they should be stored in a config - so they can be compiled into the app.
 - [ ] Update our csv to use category ids
 - [ ] Shrink bot avatars (apps/judgy/assets/images/bots/) with a PNG optimizer
+- [ ] Double check what is being stored locally - cards / categories / ids, or what
+- [ ] Implement Firebase Remote Config
 
 ## Testing Checklist
 - [x] test/services/auth_service_test.dart (local mocktail tests)

@@ -1,1 +1,55 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"judgy-bramp-net","appId":"1:655860970964:android:f887611c82505c6eaa5241","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"judgy-bramp-net","appId":"1:655860970964:ios:a029e77788af5b71aa5241","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"judgy-bramp-net","appId":"1:655860970964:ios:a029e77788af5b71aa5241","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"judgy-bramp-net","configurations":{"android":"1:655860970964:android:f887611c82505c6eaa5241","ios":"1:655860970964:ios:a029e77788af5b71aa5241","macos":"1:655860970964:ios:a029e77788af5b71aa5241","web":"1:655860970964:web:ef055aa50289bcfeaa5241"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "judgy-bramp-net",
+          "appId": "1:655860970964:android:f887611c82505c6eaa5241",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "judgy-bramp-net",
+          "appId": "1:655860970964:ios:a029e77788af5b71aa5241",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "judgy-bramp-net",
+          "appId": "1:655860970964:ios:a029e77788af5b71aa5241",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "judgy-bramp-net",
+          "configurations": {
+            "android": "1:655860970964:android:f887611c82505c6eaa5241",
+            "ios": "1:655860970964:ios:a029e77788af5b71aa5241",
+            "macos": "1:655860970964:ios:a029e77788af5b71aa5241",
+            "web": "1:655860970964:web:ef055aa50289bcfeaa5241"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    }
+  }
+}

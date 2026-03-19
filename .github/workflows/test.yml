@@ -40,6 +40,18 @@ jobs:
       - name: Run unit tests
         run: make test-app-ci
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Run integration tests
+        run: make test-integration-ci
+
 #  golden_tests:
 #    runs-on: macos-latest
 #    steps:

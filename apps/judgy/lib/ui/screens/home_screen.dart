@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:judgy/services/auth_service.dart';
+import 'package:judgy/services/matchmaking_service.dart';
 import 'package:provider/provider.dart';
 
 /// Screen widget for home flow.
@@ -74,15 +75,31 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // TODO(bramp): Navigate to lobby/create game
+              onPressed: () async {
+                final authService = context.read<AuthService>();
+                if (!authService.isAuthenticated) {
+                  await authService.signInAnonymously();
+                }
+
+                final user = authService.currentUser;
+                if (user == null) return;
+
+                final matchmaking = MatchmakingService();
+                final roomId = await matchmaking.createPrivateRoom(
+                  user.uid,
+                  user.displayName ?? user.email ?? 'Player',
+                );
+
+                if (context.mounted) {
+                  unawaited(context.push('/game/online/$roomId'));
+                }
               },
               child: const Text('Create Game'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // TODO(bramp): Navigate to join game
+                unawaited(context.push('/join'));
               },
               child: const Text('Join Game'),
             ),

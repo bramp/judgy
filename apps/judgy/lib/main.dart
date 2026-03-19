@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +16,9 @@ import 'package:judgy/services/deck_service.dart';
 import 'package:judgy/services/preferences_service.dart';
 import 'package:judgy/ui/screens/game_screen.dart';
 import 'package:judgy/ui/screens/home_screen.dart';
+import 'package:judgy/ui/screens/join_game_screen.dart';
 import 'package:judgy/ui/screens/login_screen.dart';
+import 'package:judgy/ui/screens/online_game_screen.dart';
 import 'package:judgy/ui/screens/settings_screen.dart';
 import 'package:judgy/ui/widgets/consent_banner.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +36,20 @@ Future<void> setupSystemChrome() async {
 
   // Enable edge-to-edge mode (especially for modern Android)
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+}
+
+/// Connects to local Firebase emulators when USE_FIREBASE_EMULATOR is set.
+///
+/// Run the app with `--dart-define=USE_FIREBASE_EMULATOR=true` and start
+/// the emulators with `firebase emulators:start` in the apps/judgy directory.
+@visibleForTesting
+Future<void> connectToEmulators() async {
+  const useEmulator = bool.fromEnvironment('USE_FIREBASE_EMULATOR');
+  if (!useEmulator) return;
+
+  debugPrint('Connecting to Firebase emulators...');
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
 }
 
 /// Initializes Firebase and App Check for the current platform.
@@ -86,6 +104,7 @@ void main() async {
 
   await setupSystemChrome();
   await setupFirebase();
+  await connectToEmulators();
 
   final services = await initializeServices();
   final consentService = services['consentService'] as ConsentService;
@@ -126,6 +145,16 @@ final _router = GoRouter(
     GoRoute(
       path: '/game/local',
       builder: (context, state) => const GameScreen(),
+    ),
+    GoRoute(
+      path: '/game/online/:roomId',
+      builder: (context, state) => OnlineGameScreen(
+        roomId: state.pathParameters['roomId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/join',
+      builder: (context, state) => const JoinGameScreen(),
     ),
     GoRoute(
       path: '/settings',

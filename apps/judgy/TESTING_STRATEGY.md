@@ -42,7 +42,56 @@ We are actively implementing the following core service unit tests using `mockta
 - [ ] local_game_engine_test.dart
 - [ ] matchmaking_service_test.dart
 - [ ] preferences_service_test.dart
+- [ ] online_game_engine_test.dart
 
-## 4. Continuous Integration (CI)
-- Tests should be run on PR submission and merges to `main` via GitHub Actions.
-- Command: `flutter test` for standard tests.
+## 4. Firebase Emulator Testing
+
+For realistic local testing of online multiplayer features without hitting
+production Firebase:
+
+### Setup
+1. Install Firebase CLI: `npm install -g firebase-tools`
+2. From `apps/judgy/`, start the emulators:
+   ```bash
+   firebase emulators:start
+   ```
+3. Run the app with the emulator flag:
+   ```bash
+   flutter run --dart-define=USE_FIREBASE_EMULATOR=true
+   ```
+4. Open the Emulator UI at `http://localhost:4000` to inspect Firestore data.
+
+### What to Test Manually
+- Create a room on one device/browser tab
+- Join from another tab using the join code
+- Verify real-time player list updates in the lobby
+- Start game and play through a full round
+- Test leaving mid-game (host transfer)
+- Test joining with invalid/expired codes
+
+### Emulator Ports
+| Service    | Port |
+|------------|------|
+| Auth       | 9099 |
+| Firestore  | 8080 |
+| Emulator UI| 4000 |
+
+## 5. Continuous Integration (CI)
+
+Tests run automatically on PRs and pushes to `main` via GitHub Actions
+(`.github/workflows/test.yml`).
+
+### Pipeline Steps
+1. **Format** — `make format` (checks `dart format`)
+2. **Analyze** — `make analyze` (runs `flutter analyze`)
+3. **Engine tests** — `make test-engine` (pure-Dart engine tests)
+4. **Unit tests** — `make test-app-ci` (all unit/widget tests, excludes golden)
+5. **Integration tests** — `make test-integration-ci` (starts Firebase Auth +
+   Firestore emulators, runs `integration_test/` with
+   `USE_FIREBASE_EMULATOR=true`)
+
+### Requirements
+- **Java 17** — needed by the Firebase Emulator Suite (installed via
+  `actions/setup-java@v4`)
+- **firebase-tools** — installed via `npm install -g firebase-tools`
+- **Flutter stable** — installed via `subosito/flutter-action@v2`
