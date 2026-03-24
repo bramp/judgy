@@ -7,4 +7,4 @@ environment:
 workspace:
   - apps/judgy
 dependencies:
-  csv: ^7.2.0
+  csv: ^8.0.0
